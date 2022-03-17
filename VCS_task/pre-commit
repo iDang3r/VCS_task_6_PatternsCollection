@@ -1,0 +1,36 @@
+#!/bin/sh
+
+PYLINT_SCORE="9.0"
+
+# ---------- Colors ----------
+FAIL="\033[0;31mFAIL:\033[0m"
+OK="\033[0;32mOK:\033[0m"
+# ----------------------------
+
+fileList=$(git diff --cached --name-only)
+
+# echo "------- fileList -------"
+# echo $fileList | tr " " "\n"
+# echo "------------------------"
+
+pyFileList=$(echo "$fileList" | grep -E '\.(py)$')
+
+# echo "------ pyFileList ------"
+# echo $pyFileList | tr " " "\n"
+# echo "------------------------"
+
+if [ ${#pyFileList} -gt 0 ]
+then
+    result_score=$(pylint ${pyFileList[*]} | sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p')
+	
+	if [ $(echo "$result_score < $PYLINT_SCORE" | bc) -ne 0 ]
+	then 
+		echo "$FAIL result pylint score: $result_score. Less than $PYLINT_SCORE."
+		echo "Checked files:"
+		echo $pyFileList | tr " " "\n"
+		exit 1
+	else
+		echo "$OK result pylint score: $result_score."
+	fi
+		
+fi
