@@ -3,7 +3,7 @@ from factories.BasementFactory import BasementFactory
 from factories.CavesFactory import CavesFactory
 from rooms.HardRoom import HardRoom
 from rooms.NormalRoom import NormalRoom
-
+# bad comment
 
 def main():
     basement_factory: RoomFactory = BasementFactory()
